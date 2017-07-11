@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# PROVIDE: @spring_boot_daemon@
+# REQUIRE: DAEMON
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name=@spring_boot_daemon@
+rcvar=${name}_enable
+
+load_rc_config $name
+
+: ${@spring_boot_daemon@_enable:="NO"}
+: ${@spring_boot_daemon@_user:="root"}
+: ${@spring_boot_daemon@_basedir:="/usr/local/@spring-boot-daemon@"}
+: ${@spring_boot_daemon@_etcdir:="/usr/local/etc/@spring-boot-daemon@"}
+: ${@spring_boot_daemon@_logdir:="/var/log"}
+: ${@spring_boot_daemon@_stdout:="${@spring_boot_daemon@_logdir}/@spring-boot-daemon@-stdout.log"}
+: ${@spring_boot_daemon@_stderr:="${@spring_boot_daemon@_logdir}/@spring-boot-daemon@-stderr.log"}
+: ${@spring_boot_daemon@_java_home:="/usr/local/openjdk8"}
+: ${@spring_boot_daemon@_lib:="${@spring_boot_daemon@_basedir}/lib"}
+: ${@spring_boot_daemon@_classpath:="${@spring_boot_daemon@_etcdir}:${@spring_boot_daemon@_lib}/*"}
+
+pidfile="/var/run/${name}.pid"
+
+command="/usr/local/bin/jsvc"
+command_args="-java-home '${@spring_boot_daemon@_java_home}' \
+	-server \
+	-user ${@spring_boot_daemon@_user} \
+	-pidfile '${pidfile}' \
+	-outfile '${@spring_boot_daemon@_stdout}' \
+	-errfile '${@spring_boot_daemon@_stderr}' \
+	-classpath '/usr/local/share/java/classes/commons-daemon.jar:${@spring_boot_daemon@_classpath}' \
+	-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager \
+	-Dlog.dir='${@spring_boot_daemon@_logdir}' \
+	@org.oxerr.spring.boot.daemon.SpringApplicationDaemon@"
+
+run_rc_command "$1"
