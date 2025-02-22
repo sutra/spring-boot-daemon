@@ -8,6 +8,9 @@ import org.apache.commons.daemon.DaemonInitException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+/**
+ * A daemon implementation based on {@link SpringApplication}.
+ */
 public abstract class SpringApplicationDaemon implements Daemon {
 
 	private final Logger log = Logger.getLogger(SpringApplicationDaemon.class.getName());
@@ -56,6 +59,12 @@ public abstract class SpringApplicationDaemon implements Daemon {
 		log.info("Destroyed.");
 	}
 
+	/**
+	 * Initialize the {@link SpringApplication}.
+	 *
+	 * @param context the daemon context.
+	 * @return the {@link SpringApplication}.
+	 */
 	protected abstract SpringApplication initSpringApplication(DaemonContext context);
 
 }
