@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.daemon.Daemon;
 import org.apache.commons.daemon.DaemonContext;
-import org.apache.commons.daemon.DaemonInitException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -22,8 +21,7 @@ public abstract class SpringApplicationDaemon implements Daemon {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void init(DaemonContext context) throws DaemonInitException,
-			Exception {
+	public void init(DaemonContext context) throws Exception {
 		log.info("Initializing...");
 		this.application = this.initSpringApplication(context);
 		log.info("Initialized.");
