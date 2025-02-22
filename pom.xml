@@ -23,7 +23,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<commons-daemon.version>1.4.0</commons-daemon.version>
+		<commons-daemon.version>1.4.1</commons-daemon.version>
 		<spring-boot.version>2.7.18</spring-boot.version>
 	</properties>
 	<build>
