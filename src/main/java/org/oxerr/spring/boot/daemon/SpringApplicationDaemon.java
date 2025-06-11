@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.daemon.Daemon;
 import org.apache.commons.daemon.DaemonContext;
+import org.apache.commons.daemon.DaemonInitException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -21,7 +22,7 @@ public abstract class SpringApplicationDaemon implements Daemon {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void init(DaemonContext context) throws Exception {
+	public void init(DaemonContext context) throws DaemonInitException, Exception {
 		log.info("Initializing...");
 		this.application = this.initSpringApplication(context);
 		log.info("Initialized.");
@@ -33,7 +34,7 @@ public abstract class SpringApplicationDaemon implements Daemon {
 	@Override
 	public void start() throws Exception {
 		log.info("Starting...");
-		context = application.run();
+		this.context = application.run();
 		log.info("Started.");
 	}
 
@@ -43,7 +44,9 @@ public abstract class SpringApplicationDaemon implements Daemon {
 	@Override
 	public void stop() throws Exception {
 		log.info("Stopping...");
-		context.stop();
+		if (context != null && context.isActive()) {
+			context.close();
+		}
 		log.info("Stopped.");
 	}
 
@@ -53,7 +56,6 @@ public abstract class SpringApplicationDaemon implements Daemon {
 	@Override
 	public void destroy() {
 		log.info("Destroying...");
-		context.close();
 		log.info("Destroyed.");
 	}
 
